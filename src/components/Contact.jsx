@@ -1,89 +1,113 @@
 import React from "react";
-import { AiOutlineMail, AiOutlinePhone } from "react-icons/ai"; // Email et téléphone
-import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa"; // Réseaux sociaux
+import { AiOutlineMail, AiOutlinePhone } from "react-icons/ai";
+import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { Tooltip } from "react-tooltip";
+import { useInView } from "react-intersection-observer";
 
 function Contact() {
+  const { ref, inView } = useInView({ triggerOnce: true });
+
   return (
     <section
       id="contact"
-      className="py-28 px-4 scroll-mt-40 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500"
+      ref={ref}
+      className="relative py-28 px-6 max-w-6xl mx-auto bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900 overflow-hidden"
+      aria-labelledby="contact-title"
     >
-      {/* TITRE */}
-      <div className="text-center mb-14 text-white">
-        <h2 className="text-4xl font-bold mb-4">Contact</h2>
-        <p className="text-white/90">
-         Une opportunité, un projet ou une alternance ? 
-          Contactez-moi facilement via les informations ci-dessous.
+      <div className="text-center mb-14 text-white dark:text-gray-100">
+        <h2
+          id="contact-title"
+          className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-indigo-200 dark:from-gray-100 dark:to-indigo-300 bg-clip-text text-transparent font-poppins"
+        >
+          Contact
+        </h2>
+        <p className="text-white/90 dark:text-gray-300">
+          Une opportunité, un projet ou une alternance ? Contactez-moi facilement via les informations ci-dessous.
         </p>
       </div>
-
-      {/* CARTE */}
-      <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-2xl p-10">
-        <ul className="space-y-6 text-gray-700 text-lg">
-
-          {/* EMAIL */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={inView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 0.8 }}
+        className="max-w-xl mx-auto bg-white/10 dark:bg-gray-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-10 border border-white/20 dark:border-gray-700"
+      >
+        <ul className="space-y-6 text-gray-700 dark:text-gray-300 text-lg">
           <li className="flex items-center gap-4">
-            <AiOutlineMail className="text-indigo-600 text-2xl" />
+            <AiOutlineMail className="text-indigo-600 dark:text-indigo-400 text-2xl" />
             <a
               href="https://mail.google.com/mail/u/0/?pli=1#inbox?compose=GTvVlcSBnqHwhlHSZZWsMVBCdhKMHQWXnfFmcJJgpDDtNncJVjTFGwDpjvnKTZKRdXwWGXqjpKVzj"
-              className="hover:underline text-gray-900"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline text-gray-900 dark:text-gray-100 transition"
+              data-tooltip-id="email-tooltip"
+              data-tooltip-content="Cliquez pour ouvrir Gmail"
+              aria-label="Envoyer un email à Asma Haddad"
             >
               haddadasa006@gmail.com
             </a>
           </li>
-
-          {/* TÉLÉPHONE */}
           <li className="flex items-center gap-4">
-            <AiOutlinePhone className="text-indigo-600 text-2xl" />
+            <AiOutlinePhone className="text-indigo-600 dark:text-indigo-400 text-2xl" />
             <a
               href="tel:+33759265666"
-              className="hover:underline text-gray-900"
+              className="hover:underline text-gray-900 dark:text-gray-100 transition"
+              data-tooltip-id="phone-tooltip"
+              data-tooltip-content="Cliquez pour appeler"
+              aria-label="Appeler Asma Haddad"
             >
               +33 7 59 26 56 66
             </a>
           </li>
-
-          {/* LinkedIn */}
           <li className="flex items-center gap-4">
-            <FaLinkedin className="text-blue-700 text-2xl hover:text-blue-500 transition" />
+            <FaLinkedin className="text-blue-700 dark:text-blue-500 text-2xl hover:text-blue-500 dark:hover:text-blue-400 transition" />
             <a
               href="https://www.linkedin.com/in/asma-haddad-a869b5334/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline"
+              className="hover:underline text-gray-900 dark:text-gray-100 transition"
+              data-tooltip-id="linkedin-tooltip"
+              data-tooltip-content="Voir mon profil LinkedIn"
+              aria-label="Profil LinkedIn d'Asma Haddad"
             >
               LinkedIn
             </a>
           </li>
-
-          {/* GitHub */}
           <li className="flex items-center gap-4">
-            <FaGithub className="text-gray-900 text-2xl hover:text-gray-700 transition" />
+            <FaGithub className="text-gray-900 dark:text-gray-100 text-2xl hover:text-gray-700 dark:hover:text-gray-300 transition" />
             <a
               href="https://github.com/ASMAJSMB"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline"
+              className="hover:underline text-gray-900 dark:text-gray-100 transition"
+              data-tooltip-id="github-tooltip"
+              data-tooltip-content="Voir mes projets GitHub"
+              aria-label="Profil GitHub d'Asma Haddad"
             >
               GitHub
             </a>
           </li>
-
-          {/* Instagram */}
           <li className="flex items-center gap-4">
-            <FaInstagram className="text-pink-500 text-2xl hover:text-pink-400 transition" />
+            <FaInstagram className="text-pink-500 dark:text-pink-400 text-2xl hover:text-pink-400 dark:hover:text-pink-300 transition" />
             <a
               href="https://www.instagram.com/aasma_hd/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline"
+              className="hover:underline text-gray-900 dark:text-gray-100 transition"
+              data-tooltip-id="instagram-tooltip"
+              data-tooltip-content="Suivez-moi sur Instagram"
+              aria-label="Profil Instagram d'Asma Haddad"
             >
-             Instagram
+              Instagram
             </a>
           </li>
-
         </ul>
-      </div>
+      </motion.div>
+      <Tooltip id="email-tooltip" place="top" effect="solid" />
+      <Tooltip id="phone-tooltip" place="top" effect="solid" />
+      <Tooltip id="linkedin-tooltip" place="top" effect="solid" />
+      <Tooltip id="github-tooltip" place="top" effect="solid" />
+      <Tooltip id="instagram-tooltip" place="top" effect="solid" />
     </section>
   );
 }

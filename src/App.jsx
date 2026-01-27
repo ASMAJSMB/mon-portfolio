@@ -1,44 +1,45 @@
 import React, { useState, useEffect } from "react";
-import Header from "./components/Header.jsx";
-import Accueil from "./components/Accueil.jsx";
-import Bubbles from "./components/Bubbles";
-import APropos from "./components/APropos.jsx";
-import Competences from "./components/Competences.jsx";
-import Projets from "./components/Projets.jsx";
-import Experiences from "./components/Experiences.jsx";
-import Contact from "./components/Contact.jsx";
-  
-function App() {
-  // State pour déclencher l'animation de la page Accueil
-  const [replayAccueil, setReplayAccueil] = useState(0);
+import Header from "./components/Header";
+import Accueil from "./components/Accueil";
+import APropos from "./components/APropos";
+import Competences from "./components/Competences";
+import Projets from "./components/Projets";
+import Experiences from "./components/Experiences";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
+import ScrollToTopButton from "./components/ScrollToTopButton";
+import useCursor from "./components/useCursor"; // Assurez-vous que le dossier hooks existe
 
-  // Détecter le scroll vers le haut pour rejouer l'animation
+function App() {
+  const [darkMode, setDarkMode] = useState(false);
+  const [replay, setReplay] = useState(false);
+
+  // Hook pour le curseur personnalisé
+  useCursor();
+
+  // Gestion du mode sombre global
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY === 0) {
-        setReplayAccueil((prev) => prev + 1);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    document.documentElement.classList.toggle('dark', darkMode);
+  }, [darkMode]);
+
+  const handleAccueilClick = () => {
+    setReplay(!replay); // Replay animation on home click
+  };
 
   return (
-    <div className="scroll-smooth bg-gray-900 text-white">
-      <Header onAccueilClick={() => setReplayAccueil((prev) => prev + 1)} />
-     <div className="relative min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 overflow-hidden">
-  <Bubbles /> {/* z-0, derrière le contenu */}
-  <div className="relative z-10">
-    <Accueil key={replayAccueil} replay={replayAccueil} />
-    <APropos />
-    <Projets />
-    <Competences/>
-    <Experiences/>
-    <Contact />
-  </div>
-</div>
-</div>
-     
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-500 font-poppins">
+      <Header onAccueilClick={handleAccueilClick} darkMode={darkMode} setDarkMode={setDarkMode} />
+      <main>
+        <Accueil replay={replay} />
+        <APropos />
+        <Competences />
+        <Projets />
+        <Experiences />
+        <Contact />
+      </main>
+      <Footer />
+      <ScrollToTopButton />
+    </div>
   );
 }
 
