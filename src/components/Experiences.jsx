@@ -7,18 +7,19 @@ function Experiences() {
 
   const experiences = [
     {
-      titre: "Développeuse Web & Mobile – Stage",
+      titre: "Développeuse Web – Stage",
       entreprise: "OneDom, Saint-Denis",
       periode: "Janvier – Mars 2025 (2 mois)",
       description: [
-        "Développement de fonctionnalités web et mobile pour l'application interne.",
+        "Améliorations des fonctionnalitées du site web.",
         "Participation aux réunions techniques et à la planification agile.",
         "Tests et correction des bugs pour améliorer l'expérience utilisateur.",
       ],
       color: "hover:shadow-indigo-400/50",
+      lien: "https://one-dom.fr/", // Ajouté le lien ici pour OneDom
     },
     {
-      titre: "Développeuse Web – Stage",
+      titre: "Développeuse Web & Mobile – Stage",
       entreprise: "Algérie Telecom, Algérie",
       periode: "Janvier – Mai 2024 (5 mois)",
       description: [
@@ -27,26 +28,25 @@ function Experiences() {
         "Collaboration avec l'équipe technique pour améliorer les performances.",
       ],
       color: "hover:shadow-blue-400/50",
-    },
+      },
     {
-      titre: "Gestion – Alternance",
+      titre: "Gestion et management– Alternance",
       entreprise: "Pokawa",
       periode: "Actuellement",
       description: [
-        "Management de l'équipe et coordination des opérations quotidiennes.",
-        "Optimisation des processus internes et du service client.",
-        "Participation à la stratégie commerciale et marketing du restaurant.",
-      ],
+       " Encadrement des équipes, gestion des plannings, supervision du service et respect des standards qualité.",
+      "Contribution à la performance commerciale : gestion des stocks et participation aux actions marketing locales.",
+      "Participation à la stratégie commerciale et marketing du restaurant."  ],
       color: "hover:shadow-green-400/50",
     },
     {
-      titre: "Management – Restaurant familial",
+      titre: "Gestion et management – Restaurant familial",
       entreprise: "Algérie",
       periode: "Avant 2024",
       description: [
-        "Gestion d'équipe : supervision du personnel et coordination des tâches.",
-        "Organisation des opérations quotidiennes et gestion des stocks.",
-        "Amélioration de l'expérience client et optimisation des ventes.",
+        "Direction des services quotidiens, de la gestion des stocks et des relations fournisseurs pour garantir la rentabilité.",
+        "Encadrement, recrutement et coordination du personnel pour assurer la fluidité du service..",
+        "Optimisation des ventes et de la satisfaction client par un accueil personnalisé et une amélioration constante de l'offre.",
       ],
       color: "hover:shadow-orange-400/50",
     },
@@ -88,6 +88,18 @@ function Experiences() {
             <h3 className="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">{exp.titre}</h3>
             <p className="text-indigo-500 dark:text-indigo-300 mb-2">{exp.entreprise}</p>
             <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">{exp.periode}</p>
+            {exp.lien && (
+              <p className="mb-4">
+                <a
+                  href={exp.lien}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                >
+                  Visiter le site web
+                </a>
+              </p>
+            )}
             <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
               {exp.description.map((item, i) => (
                 <li key={i}>{item}</li>

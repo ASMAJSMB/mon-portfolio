@@ -50,7 +50,7 @@ function Footer() {
           </motion.a>
         </div>
         <p className="text-sm text-gray-400 dark:text-gray-500">
-          Fait avec <FaHeart className="inline text-red-500 dark:text-red-400 animate-pulse" /> par Asma Haddad © 2024
+          Fait avec <FaHeart className="inline text-red-500 dark:text-red-400 animate-pulse" /> par Asma Haddad © 2024-2026
         </p>
       </div>
     </footer>

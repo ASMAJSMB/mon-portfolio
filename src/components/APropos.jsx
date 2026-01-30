@@ -1,8 +1,56 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { FaDownload } from "react-icons/fa";
 
 function APropos() {
+  // États pour les compteurs animés
+  const [count1, setCount1] = useState(0); // Pour "10+"
+  const [count2, setCount2] = useState(0); // Pour "3"
+  const [count3, setCount3] = useState(0); // Pour "4"
+  const [isVisible, setIsVisible] = useState(false); // Pour déclencher l'animation au scroll
+
+  const statsRef = useRef(null); // Ref pour la section des statistiques
+
+  // Fonction pour animer un compteur
+  const animateCounter = (setter, target, duration) => {
+    let start = 0;
+    const increment = target / (duration / 50); // Incrément par étape (50ms)
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        setter(target); // Atteint la cible
+        clearInterval(timer);
+      } else {
+        setter(Math.floor(start)); // Incrémente
+      }
+    }, 50);
+  };
+
+  // useEffect pour détecter quand la section est visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true); // Déclenche l'animation
+        }
+      },
+      { threshold: 0.5 } // 50% de la section visible
+    );
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+    return () => observer.disconnect(); // Nettoyage
+  }, []);
+
+  // useEffect pour lancer les animations quand visible
+  useEffect(() => {
+    if (isVisible) {
+      animateCounter(setCount1, 10, 2000); // 2 secondes pour 10+
+      animateCounter(setCount2, 3, 1000);  // 1 seconde pour 3
+      animateCounter(setCount3, 4, 1000);  // 1 seconde pour 2
+    }
+  }, [isVisible]);
+
   return (
     <section
       id="apropos"
@@ -25,7 +73,7 @@ function APropos() {
         className="max-w-3xl mx-auto text-center space-y-4"
       >
         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-          J'ai <strong>20 ans</strong> et je suis développeuse fullstack avec un <strong>baccalauréat en marketing et communication digitale</strong>. Mon double profil technique et marketing me permet de comprendre à la fois les besoins des utilisateurs et les objectifs stratégiques d'une entreprise.
+          J'ai <strong>20 ans</strong> et je suis développeuse fullstack avec un <strong>bachelor en marketing et communication digitale</strong>. Mon double profil technique et marketing me permet de comprendre à la fois les besoins des utilisateurs et les objectifs stratégiques d'une entreprise.
         </p>
         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
           <strong>Ambitieuse, rigoureuse et orientée résultats</strong>, je souhaite mettre mes compétences techniques et mon sens de l'organisation au service de vos projets. Je suis capable de gérer des tâches complexes, de collaborer efficacement avec les équipes et d'apporter un vrai sérieux et de la valeur ajoutée à votre entreprise.
@@ -39,22 +87,22 @@ function APropos() {
           whileHover={{ y: -10, rotateY: 15 }}
           className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 text-center shadow-lg border border-gray-200 dark:border-gray-700 transform transition-transform duration-500 hover:shadow-2xl"
         >
-          <h3 className="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">Développement Full-Stack</h3>
-          <p className="text-gray-600 dark:text-gray-400 text-sm">React, JavaScript, API, bases backend</p>
+          <h3 className="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">Développement Full-Stack et mobile</h3>
+          <p className="text-gray-600 dark:text-gray-400 text-sm">React, JavaScript, API, bases backend ,Applications modernes</p>
         </motion.div>
         <motion.div
           whileHover={{ y: -10, rotateY: 15 }}
           className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 text-center shadow-lg border border-gray-200 dark:border-gray-700 transform transition-transform duration-500 hover:shadow-2xl"
         >
-          <h3 className="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">Web et mobile</h3>
-          <p className="text-gray-600 dark:text-gray-400 text-sm">Applications modernes, réactives et performantes</p>
+          <h3 className="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400"> Management d'équipe </h3>
+          <p className="text-gray-600 dark:text-gray-400 text-sm">Gestion des plannings, Répartition des tâches</p>
         </motion.div>
         <motion.div
           whileHover={{ y: -10, rotateY: 15 }}
           className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 text-center shadow-lg border border-gray-200 dark:border-gray-700 transform transition-transform duration-500 hover:shadow-2xl"
         >
-          <h3 className="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">Marketing & Management</h3>
-          <p className="text-gray-600 dark:text-gray-400 text-sm">Communication digitale, stratégie & gestion de projet</p>
+          <h3 className="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400"> Marketing et Communication digital   </h3>
+          <p className="text-gray-600 dark:text-gray-400 text-sm"> Outils digitaux,Analyse & performance,Création de contenu </p>
         </motion.div>
       </div>
       <div className="flex justify-center mt-12">
@@ -74,17 +122,17 @@ function APropos() {
           </span>
         </motion.a>
       </div>
-      <div className="flex justify-center gap-16 mt-20 text-center">
+      <div ref={statsRef} className="flex justify-center gap-16 mt-20 text-center">
         <motion.div whileHover={{ scale: 1.1 }}>
-          <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">10+</p>
+          <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">{count1}+</p>
           <p className="text-gray-600 dark:text-gray-400">Projets réalisés</p>
         </motion.div>
         <motion.div whileHover={{ scale: 1.1 }}>
-          <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">3</p>
+          <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">{count2}</p>
           <p className="text-gray-600 dark:text-gray-400">Domaines de compétence</p>
         </motion.div>
         <motion.div whileHover={{ scale: 1.1 }}>
-          <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">2</p>
+          <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">{count3}</p>
           <p className="text-gray-600 dark:text-gray-400">Années d'expérience</p>
         </motion.div>
       </div>

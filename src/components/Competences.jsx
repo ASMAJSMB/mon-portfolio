@@ -16,7 +16,7 @@ function Competences() {
         { name: "HTML", icon: <FaHtml5 className="text-orange-500 w-6 h-6 animate-pulse" /> },
         { name: "CSS", icon: <FaCss3Alt className="text-blue-500 w-6 h-6 animate-pulse" /> },
         { name: "JavaScript", icon: <FaJs className="text-yellow-400 w-6 h-6 animate-pulse" /> },
-        { name: "React", icon: <FaReact className="text-cyan-400 w-6 h-6 animate-pulse" /> },
+        { name: "React / React native", icon: <FaReact className="text-cyan-400 w-6 h-6 animate-pulse" /> },
         { name: "Tailwind CSS", icon: <SiTailwindcss className="text-blue-400 w-6 h-6 animate-pulse" /> },
         { name: "Firebase", icon: <SiFirebase className="text-yellow-400 w-6 h-6 animate-pulse" /> },
         { name: "PHP", icon: <FaPhp className="text-blue-700 w-6 h-6 animate-pulse" /> },
@@ -25,7 +25,7 @@ function Competences() {
       codeSnippet: `const devSkills = ['HTML', 'CSS', 'JS', 'React'];\nconsole.log('Mastering:', devSkills.join(', '));`,
     },
     {
-      titre: "📈 Marketing & Business",
+      titre: "📈Marketing & Management",
       color: "bg-gradient-to-r from-green-500 to-teal-600",
       items: [
         { name: "Bases du marketing digital", icon: "📊" },
