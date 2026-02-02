@@ -23,12 +23,12 @@ function Accueil({ replay }) {
     setTypedText("");
     let i = 0;
     
-    const typing = setInterval(() => {
+   const typing = setInterval(() => {
       if (i < fullText.length && isMounted) {
         setTypedText(fullText.slice(0, i + 1));
         i++;
       } else {
-        clearInterval(typing);
+         clearInterval(typing);
       }
     }, 100);
 

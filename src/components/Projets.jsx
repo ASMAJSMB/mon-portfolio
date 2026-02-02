@@ -27,7 +27,7 @@ function Projets() {
       apprentissage: "Intégration web à partir de maquettes réalisées par des designers ",
       github: "https://github.com/ASMAJSMB/pink-elephant",
       demo: "https://arcade-fire-69ea3.web.app",
-      image: "../../public/image/code.jpg",
+      image: "/image/code.jpg",
     },
     {
       nom: "Site Web Pink-Elephant-Admin ",
@@ -36,7 +36,8 @@ function Projets() {
       apprentissage: "Développement web, synchronisation en temps réel.",
       github: "https://github.com/nylbix12/arcade-fire-vitrine",
       demo: "https://arcadeback.web.app",
-      image: "../../public/image/cod.jpg",
+      image: "/image/cod.jpg"
+
     },
   ];
 
