@@ -1,67 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaArrowRight, FaGithub, FaLinkedin } from "react-icons/fa";
 import { motion } from "framer-motion";
 import ParticlesBackground from "./ParticlesBackground";
 
 function Accueil({ replay }) {
   const [playAnimation, setPlayAnimation] = useState(false);
-  const [typedText, setTypedText] = useState("");
-  const [typedDescription, setTypedDescription] = useState(""); // Nouvel état pour la description
+  const [typedDescription, setTypedDescription] = useState("");
   const fullText = "Développeuse web & mobile junior";
   const fullDescription = "Développeuse fullstack avec une expérience en management et gestion de projets, titulaire d'un bachelor en marketing et communication numérique.";
+  const descTypingIndexRef = useRef(0);
+  const timerRef = useRef(null);
 
-  // useEffect pour gérer l'animation globale (déclenchée par replay)
+  // useEffect pour gérer l'animation globale
   useEffect(() => {
     setPlayAnimation(false);
     const timer = setTimeout(() => setPlayAnimation(true), 50);
     return () => clearTimeout(timer);
   }, [replay]);
 
-  // useEffect pour l'effet de typing du sous-titre (avec protection contre les memory leaks)
-  useEffect(() => {
-    let isMounted = true; // Flag pour éviter les mises à jour sur un composant démonté
-    setTypedText("");
-    let i = 0;
-    
-   const typing = setInterval(() => {
-      if (i < fullText.length && isMounted) {
-        setTypedText(fullText.slice(0, i + 1));
-        i++;
-      } else {
-         clearInterval(typing);
-      }
-    }, 100);
+  // Fonction récursive pour le typing de la description
+  const typeDescription = () => {
+    if (descTypingIndexRef.current < fullDescription.length) {
+      setTypedDescription(fullDescription.slice(0, descTypingIndexRef.current + 1));
+      descTypingIndexRef.current++;
+      timerRef.current = setTimeout(typeDescription, 50);
+    }
+  };
 
-    // Cleanup : arrêter l'intervalle et marquer comme démonté
-    return () => {
-      isMounted = false;
-      clearInterval(typing);
-    };
-  }, [replay]);
-
-  // useEffect pour l'effet de typing de la description (démarre après le sous-titre)
+  // useEffect pour démarrer le typing de la description
   useEffect(() => {
-    let isMounted = true;
+    descTypingIndexRef.current = 0;
     setTypedDescription("");
-    let i = 0;
-    
-    // Délai pour attendre la fin du sous-titre (durée approximative : fullText.length * 100 ms + un peu de marge)
-    const delay = fullText.length * 100 + 500; // 500ms de marge
-    const timer = setTimeout(() => {
-      const typing = setInterval(() => {
-        if (i < fullDescription.length && isMounted) {
-          setTypedDescription(fullDescription.slice(0, i + 1));
-          i++;
-        } else {
-          clearInterval(typing);
-        }
-      }, 50); // Vitesse légèrement plus rapide pour la description (ajustable)
-    }, delay);
-
-    // Cleanup
+    typeDescription();
     return () => {
-      isMounted = false;
-      clearTimeout(timer);
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [replay]);
 
@@ -82,7 +54,7 @@ function Accueil({ replay }) {
       <div className="relative z-10 max-w-6xl w-full bg-white/10 dark:bg-black/50 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/20 dark:border-gray-700 text-white flex flex-col md:flex-row items-center gap-8">
         <div className="md:w-1/2">
           <motion.h1
-            key="title" // Ajouté pour la stabilité
+            key="title"
             id="accueil-title"
             initial={{ opacity: 0, y: 60 }}
             animate={playAnimation ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
@@ -92,26 +64,26 @@ function Accueil({ replay }) {
             Asma Haddad
           </motion.h1>
           <motion.p
-            key="subtitle" // Ajouté pour la stabilité
+            key="subtitle"
             initial={{ opacity: 0 }}
             animate={playAnimation ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 2.2, duration: 1.5 }}
             className="text-2xl mb-4 text-indigo-200 font-semibold"
           >
-            {typedText} <span className="text-yellow-300">À la recherche d'une alternance</span>
+            {fullText} <span className="text-orange-400">À la recherche d'une alternance</span>
           </motion.p>
           <motion.p
-            key="description" // Ajouté pour la stabilité
+            key="description"
             initial={{ opacity: 0 }}
             animate={playAnimation ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 3.5, duration: 1.5 }} // Ajusté pour synchroniser avec la frappe
-            className="text-gray-900 dark:text-indigo-100 max-w-2xl leading-relaxed mb-10" // Correction du contraste
+            transition={{ delay: 3.5, duration: 1.5 }}
+            className="text-lg text-white dark:text-indigo-100 max-w-2xl leading-relaxed mb-10" // Changé à text-white pour visibilité
           >
             {typedDescription}
           </motion.p>
           <div className="flex gap-4 flex-wrap">
             <motion.button
-              key="projects-btn" // Ajouté pour la stabilité
+              key="projects-btn"
               whileHover={{ scale: 1.05, rotateY: 10 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => scrollToSection("projets")}
@@ -121,7 +93,7 @@ function Accueil({ replay }) {
               Voir mes projets <FaArrowRight className="inline ml-2" />
             </motion.button>
             <motion.button
-              key="contact-btn" // Ajouté pour la stabilité
+              key="contact-btn"
               whileHover={{ scale: 1.05, rotateY: 10 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => scrollToSection("contact")}
@@ -133,7 +105,7 @@ function Accueil({ replay }) {
           </div>
           <div className="flex gap-6 mt-12 text-xl text-gray-300 justify-start md:justify-start">
             <motion.a
-              key="github-link" // Ajouté pour la stabilité
+              key="github-link"
               whileHover={{ scale: 1.2, color: "#ffffff", rotate: 360 }}
               href="https://github.com/ASMAJSMB"
               target="_blank"
@@ -144,7 +116,7 @@ function Accueil({ replay }) {
               <FaGithub />
             </motion.a>
             <motion.a
-              key="linkedin-link" // Ajouté pour la stabilité
+              key="linkedin-link"
               whileHover={{ scale: 1.2, color: "#ffffff", rotate: 360 }}
               href="https://www.linkedin.com/in/asma-haddad-a869b5334/"
               target="_blank"
@@ -158,8 +130,8 @@ function Accueil({ replay }) {
         </div>
         <div className="md:w-1/2 flex justify-center md:justify-end">
           <motion.img
-            key="profile-img" // Ajouté pour la stabilité
-            src="/image/photo2.jpg" // Assurez-vous que le chemin est correct (dossier public)
+            key="profile-img"
+            src="/image/photo2.jpg"
             alt="Photo d'Asma Haddad, développeuse web"
             initial={{ opacity: 0, x: 60 }}
             animate={playAnimation ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}

@@ -4,51 +4,69 @@ import { FaDownload } from "react-icons/fa";
 
 function APropos() {
   // États pour les compteurs animés
-  const [count1, setCount1] = useState(0); // Pour "10+"
+  const [count1, setCount1] = useState(0); // Pour "10"
   const [count2, setCount2] = useState(0); // Pour "3"
   const [count3, setCount3] = useState(0); // Pour "4"
   const [isVisible, setIsVisible] = useState(false); // Pour déclencher l'animation au scroll
 
   const statsRef = useRef(null); // Ref pour la section des statistiques
+  const timerRefs = useRef([]); // Refs pour les timers des compteurs
 
-  // Fonction pour animer un compteur
-  const animateCounter = (setter, target, duration) => {
+  // Fonction pour animer un compteur avec setTimeout récursif pour plus de fiabilité
+  const animateCounter = (setter, target, duration, index) => {
     let start = 0;
-    const increment = target / (duration / 50); // Incrément par étape (50ms)
-    const timer = setInterval(() => {
+    const increment = target / (duration / 50);
+    const step = () => {
       start += increment;
       if (start >= target) {
-        setter(target); // Atteint la cible
-        clearInterval(timer);
+        setter(target);
       } else {
-        setter(Math.floor(start)); // Incrémente
+        setter(Math.floor(start));
+        timerRefs.current[index] = setTimeout(step, 50);
       }
-    }, 50);
+    };
+    step();
   };
+
+  // useEffect pour vérifier la visibilité initiale au montage
+  useEffect(() => {
+    if (statsRef.current) {
+      const rect = statsRef.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        setIsVisible(true);
+      }
+    }
+  }, []);
 
   // useEffect pour détecter quand la section est visible
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true); // Déclenche l'animation
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
         }
       },
-      { threshold: 0.5 } // 50% de la section visible
+      { threshold: 0.1 } // Réduit pour déclencher plus tôt
     );
     if (statsRef.current) {
       observer.observe(statsRef.current);
     }
-    return () => observer.disconnect(); // Nettoyage
-  }, []);
+    return () => {
+      observer.disconnect();
+      timerRefs.current.forEach(clearTimeout); // Nettoyer les timers
+    };
+  }, [isVisible]);
 
   // useEffect pour lancer les animations quand visible
   useEffect(() => {
     if (isVisible) {
-      animateCounter(setCount1, 10, 2000); // 2 secondes pour 10+
-      animateCounter(setCount2, 3, 1000);  // 1 seconde pour 3
-      animateCounter(setCount3, 4, 1000);  // 1 seconde pour 2
+      animateCounter(setCount1, 10, 2000, 0);
+      animateCounter(setCount2, 3, 1000, 1);
+      animateCounter(setCount3, 4, 1000, 2);
     }
+    return () => {
+      timerRefs.current.forEach(clearTimeout); // Nettoyer au démontage
+    };
   }, [isVisible]);
 
   return (
@@ -123,15 +141,15 @@ function APropos() {
         </motion.a>
       </div>
       <div ref={statsRef} className="flex justify-center gap-16 mt-20 text-center">
-        <motion.div whileHover={{ scale: 1.1 }}>
-          <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">{count1}+</p>
+        <motion.div key="projects" whileHover={{ scale: 1.1 }}>
+          <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">{count1}</p>
           <p className="text-gray-600 dark:text-gray-400">Projets réalisés</p>
         </motion.div>
-        <motion.div whileHover={{ scale: 1.1 }}>
+        <motion.div key="domains" whileHover={{ scale: 1.1 }}>
           <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">{count2}</p>
           <p className="text-gray-600 dark:text-gray-400">Domaines de compétence</p>
         </motion.div>
-        <motion.div whileHover={{ scale: 1.1 }}>
+        <motion.div key="years" whileHover={{ scale: 1.1 }}>
           <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">{count3}</p>
           <p className="text-gray-600 dark:text-gray-400">Années d'expérience</p>
         </motion.div>
