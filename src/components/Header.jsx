@@ -64,10 +64,7 @@ function Header({ onAccueilClick, darkMode, setDarkMode }) {
               <ul className="relative z-10 flex gap-8 text-white dark:text-gray-100 font-medium items-center whitespace-nowrap">
                 <li
                   className="cursor-pointer hover:text-yellow-400 dark:hover:text-yellow-300 transition"
-                  onClick={() => {
-                    scrollToSection("accueil");
-                    onAccueilClick();
-                  }}
+                  onClick={() => scrollToSection("accueil")}  // Correction : Suppression de onAccueilClick() pour éviter le replay inutile
                 >
                   Accueil
                 </li>
