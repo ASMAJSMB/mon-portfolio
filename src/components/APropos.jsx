@@ -92,17 +92,13 @@ function APropos() {
       >
         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
           J'ai <strong>20 ans</strong> et je suis développeuse fullstack avec un{" "}
-          <strong>bachelor en marketing et communication digitale</strong>. Mon
-          double profil technique et marketing me permet de comprendre à la fois
+          <strong>double profil technique et marketing</strong> ce qui me permet de comprendre à la fois
           les besoins des utilisateurs et les objectifs stratégiques d'une
           entreprise.
         </p>
         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-          <strong>Ambitieuse, rigoureuse et orientée résultats</strong>, je
-          souhaite mettre mes compétences techniques et mon sens de
-          l'organisation au service de vos projets. Je suis capable de gérer
-          des tâches complexes, de collaborer efficacement avec les équipes et
-          d'apporter un vrai sérieux et de la valeur ajoutée à votre entreprise.
+          
+         Après un <strong> baccalauréat en sciences expérimentales (mention très bien)</strong>, j’ai suivi <strong>2 ans en informatique à l’Université de Béjaïa (Algérie)</strong>, où j’ai acquis des bases solides en algorithmique, C++, Java POO, assembleur, Linux, mathématiques et logique. J’ai ensuite complété ma formation par une année de <strong>bachelor Web et Mobile</strong>, me spécialisant en React, PHP et Firebase. Actuellement, je poursuis un <strong>bachelor en marketing digital et communication</strong>, renforçant mes compétences en stratégie digitale.
         </p>
         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
           Mon objectif est de contribuer activement à la création de solutions
