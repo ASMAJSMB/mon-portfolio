@@ -64,12 +64,12 @@ function Accueil({ replay }) {
     >
       {!isMobile && <ParticlesBackground />}
       <div
-        className={`
-          relative z-10 max-w-6xl w-full rounded-3xl p-12 
-          ${isMobile ? "bg-white shadow-md border-gray-200" : "bg-white/10 dark:bg-black/50 backdrop-blur-xl shadow-2xl border border-white/20 dark:border-gray-700"} 
-          text-white flex flex-col md:flex-row items-center gap-8
-        `}
-      >
+  className={`
+    relative z-10 max-w-6xl w-full rounded-3xl p-12 
+    ${isMobile ? "bg-gray-2300/90 dark:bg-gray-800/70 shadow-md border-gray-300" : "bg-white/10 dark:bg-black/50 backdrop-blur-xl shadow-2xl border border-white/20 dark:border-gray-700"} 
+    text-gray flex flex-col md:flex-row items-center gap-8
+  `}
+>
         <div className="md:w-1/2">
           <motion.h1
             key="title"
@@ -96,7 +96,7 @@ function Accueil({ replay }) {
             initial={{ opacity: 0 }}
             animate={playAnimation ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 3.5, duration: 1.5 }}
-            className="text-lg text-white dark:text-indigo-100 max-w-2xl leading-relaxed mb-10"
+            className="text-lg text-gray dark:text-indigo-100 max-w-2xl leading-relaxed mb-10"
           >
             {typedDescription}
           </motion.p>

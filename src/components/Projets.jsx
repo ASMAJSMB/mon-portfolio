@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
 import { FaGithub, FaExternalLinkAlt, FaPlay, FaPause } from "react-icons/fa";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -7,7 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { useInView } from "react-intersection-observer";
 
 function Projets() {
-  const { ref, inView } = useInView({ triggerOnce: true });
+  const { ref } = useInView({ triggerOnce: true });
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -20,31 +19,43 @@ function Projets() {
   const projets = [
     {
       nom: "Application My Note App",
-      objectif: "Conception d'un gestionnaire de notes intelligent permettant de classer ses tâches de la plus urgente à la moins prioritaire.",
-      tech: "React native",
+      objectif:
+        "Conception d'un gestionnaire de notes intelligent permettant de classer ses tâches de la plus urgente à la moins prioritaire.",
+      tech: "React Native",
       apprentissage: "Création d'une application mobile interactive.",
       github: "https://github.com/ASMAJSMB/mynoteapp",
       demo: "https://ecommerce-demo.vercel.app",
-      video: "https://raw.githubusercontent.com/ASMAJSMB/mynoteapp/master/WhatsApp%20Video%202026-01-29%20at%2013.27.15.mp4",
-      image: "https://picsum.photos/400/250?random=1",
+      video:
+        "https://raw.githubusercontent.com/ASMAJSMB/mynoteapp/master/WhatsApp%20Video%202026-01-29%20at%2013.27.15.mp4",
+      imagesMobile: [
+        "/image/image1.jpeg",
+        "/image/image2.jpeg",
+        "/image/image3.jpeg",
+        "/image/image4.jpeg",
+      ],
     },
     {
       nom: "Site Web Pink-Elephant",
-      objectif: "Création d'une plateforme web sur mesure pour Pink Elephant, mettant en avant l'identité visuelle unique de la marque à travers une interface moderne et fluide.",
+      objectif:
+        "Création d'une plateforme web sur mesure pour Pink Elephant, mettant en avant l'identité visuelle unique de la marque à travers une interface moderne et fluide.",
       tech: "React, Firebase, Vite, Styled Components",
-      apprentissage: "Intégration web à partir de maquettes réalisées par des designers.",
+      apprentissage:
+        "Intégration web à partir de maquettes réalisées par des designers.",
       github: "https://github.com/ASMAJSMB/pink-elephant",
       demo: "https://arcade-fire-69ea3.web.app",
-      image: "/image/code.jpg",
+      imageDesktop: "/image/code.jpg",
+      imageMobile: "/image/code.jpg",
     },
     {
       nom: "Site Web Pink-Elephant-Admin",
-      objectif: "Développement d'une interface d'administration (Back-office) dédiée à la gestion logistique des tournées.",
+      objectif:
+        "Développement d'une interface d'administration (Back-office) dédiée à la gestion logistique des tournées.",
       tech: "React, Vite, Firebase",
       apprentissage: "Développement web, synchronisation en temps réel.",
       github: "https://github.com/nylbix12/arcade-fire-vitrine",
       demo: "https://arcadeback.web.app",
-      image: "/image/cod.jpg"
+      imageDesktop: "/image/cod.jpg",
+      imageMobile: "/image/cod.jpg",
     },
   ];
 
@@ -91,7 +102,7 @@ function Projets() {
               
               {/* MEDIA */}
               <div className="w-full md:w-1/3 bg-black flex items-center justify-center p-2 relative">
-                {projet.video && !isMobile ? (
+                {projet.nom === "Application My Note App" && !isMobile && projet.video ? (
                   <>
                     <video
                       ref={(el) => (videoRefs.current[index] = el)}
@@ -113,11 +124,24 @@ function Projets() {
                     </div>
                   </>
                 ) : (
-                  <img
-                    src={projet.image}
-                    alt={projet.nom}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {projet.nom === "Application My Note App" && isMobile
+                      ? projet.imagesMobile.map((img, i) => (
+                          <img
+                            key={i}
+                            src={img}
+                            alt={`My Note App ${i + 1}`}
+                            className="w-32 h-32 object-cover rounded-lg shadow-md"
+                          />
+                        ))
+                      : (
+                          <img
+                            src={isMobile ? projet.imageMobile : projet.imageDesktop}
+                            alt={projet.nom}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        )}
+                  </div>
                 )}
               </div>
 
@@ -127,16 +151,41 @@ function Projets() {
                   {projet.nom}
                 </h3>
                 <div className="space-y-3 mb-6">
-                  <p><strong className="text-gray-900 dark:text-white">Objectif :</strong> {projet.objectif}</p>
-                  <p><strong className="text-gray-900 dark:text-white">Technologies :</strong> {projet.tech}</p>
-                  <p><strong className="text-gray-900 dark:text-white">Apprentissages :</strong> {projet.apprentissage}</p>
+                  <p>
+                    <strong className="text-gray-900 dark:text-white">
+                      Objectif :
+                    </strong>{" "}
+                    {projet.objectif}
+                  </p>
+                  <p>
+                    <strong className="text-gray-900 dark:text-white">
+                      Technologies :
+                    </strong>{" "}
+                    {projet.tech}
+                  </p>
+                  <p>
+                    <strong className="text-gray-900 dark:text-white">
+                      Apprentissages :
+                    </strong>{" "}
+                    {projet.apprentissage}
+                  </p>
                 </div>
-                <div className="flex gap-6">
-                  <a href={projet.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition">
+                <div className="flex gap-6 flex-wrap">
+                  <a
+                    href={projet.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition"
+                  >
                     <FaGithub size={20} /> Code source
                   </a>
-                  {projet.nom !== "Application My Note App" && (
-                    <a href={projet.demo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-green-500 transition">
+                  {projet.nom !== "Application My Note App" && projet.demo && (
+                    <a
+                      href={projet.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-green-500 transition"
+                    >
                       <FaExternalLinkAlt size={18} /> Voir la démo
                     </a>
                   )}

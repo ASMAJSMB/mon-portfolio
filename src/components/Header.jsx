@@ -6,6 +6,7 @@ function Header({ darkMode, setDarkMode }) {
   const [headerVisible, setHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); // état du menu mobile
 
   // Détecte si on est sur mobile
   useEffect(() => {
@@ -35,7 +36,10 @@ function Header({ darkMode, setDarkMode }) {
     const section = document.getElementById(id);
     if (!section) return;
     section.scrollIntoView({ behavior: "smooth" });
+    if (isMobile) setMenuOpen(false); // ferme le menu après clic sur mobile
   };
+
+  const menuItems = ["accueil","apropos","competences","projets","experiences","contact"];
 
   return (
     <>
@@ -49,7 +53,7 @@ function Header({ darkMode, setDarkMode }) {
             className="fixed top-6 left-1/2 z-50 w-fit"
           >
             <nav
-              className={`relative px-10 py-4 rounded-3xl overflow-hidden border border-white/20 dark:border-gray-700 ${
+              className={`relative px-6 py-4 rounded-3xl overflow-hidden border border-white/20 dark:border-gray-700 ${
                 isMobile
                   ? "bg-white/20 dark:bg-black/60 shadow-md"
                   : "bg-white/10 dark:bg-black/80 shadow-2xl backdrop-blur-xl"
@@ -85,31 +89,68 @@ function Header({ darkMode, setDarkMode }) {
                 }`}
               ></div>
 
-              <ul className="relative z-10 flex gap-8 text-white dark:text-gray-100 font-medium items-center whitespace-nowrap">
-                {["accueil","apropos","competences","projets","experiences","contact"].map((id) => (
-                  <li
-                    key={id}
-                    className="cursor-pointer hover:text-yellow-400 dark:hover:text-yellow-300 transition"
-                    onClick={() => scrollToSection(id)}
+              {/* MENU PRINCIPAL */}
+              <div className="relative z-10 flex items-center justify-between">
+                {!isMobile && (
+                  <ul className="flex gap-8 text-white dark:text-gray-100 font-medium items-center whitespace-nowrap">
+                    {menuItems.map((id) => (
+                      <li
+                        key={id}
+                        className="cursor-pointer hover:text-yellow-400 dark:hover:text-yellow-300 transition"
+                        onClick={() => scrollToSection(id)}
+                      >
+                        {id.charAt(0).toUpperCase() + id.slice(1)}
+                      </li>
+                    ))}
+                    <li>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        onClick={() => setDarkMode(!darkMode)}
+                        className="p-2 rounded-full hover:bg-white/10 dark:hover:bg-gray-700 transition"
+                        aria-label="Toggle dark mode"
+                      >
+                        {darkMode ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-gray-400 dark:text-gray-300" />}
+                      </motion.button>
+                    </li>
+                  </ul>
+                )}
+
+                {/* BOUTON BURGER MOBILE */}
+                {isMobile && (
+                  <button
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    className="p-2 rounded-full hover:bg-white/10 dark:hover:bg-gray-700 transition text-white dark:text-gray-100"
+                    aria-label="Ouvrir le menu"
                   >
-                    {id.charAt(0).toUpperCase() + id.slice(1)}
+                    <FaBars size={24} />
+                  </button>
+                )}
+              </div>
+
+              {/* MENU MOBILE VERTICAL */}
+              {isMobile && menuOpen && (
+                <ul className="mt-4 flex flex-col gap-4 text-white dark:text-gray-100 font-medium">
+                  {menuItems.map((id) => (
+                    <li
+                      key={id}
+                      className="cursor-pointer hover:text-yellow-400 dark:hover:text-yellow-300 transition"
+                      onClick={() => scrollToSection(id)}
+                    >
+                      {id.charAt(0).toUpperCase() + id.slice(1)}
+                    </li>
+                  ))}
+                  <li>
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      onClick={() => setDarkMode(!darkMode)}
+                      className="p-2 rounded-full hover:bg-white/10 dark:hover:bg-gray-700 transition"
+                      aria-label="Toggle dark mode"
+                    >
+                      {darkMode ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-gray-400 dark:text-gray-300" />}
+                    </motion.button>
                   </li>
-                ))}
-                <li>
-                  <motion.button
-                    whileHover={!isMobile ? { scale: 1.1 } : {}}
-                    onClick={() => setDarkMode(!darkMode)}
-                    className="p-2 rounded-full hover:bg-white/10 dark:hover:bg-gray-700 transition"
-                    aria-label="Toggle dark mode"
-                  >
-                    {darkMode ? (
-                      <FaSun className="text-yellow-400" />
-                    ) : (
-                      <FaMoon className="text-gray-400 dark:text-gray-300" />
-                    )}
-                  </motion.button>
-                </li>
-              </ul>
+                </ul>
+              )}
             </nav>
           </motion.header>
         )}
