@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineMail, AiOutlinePhone } from "react-icons/ai";
 import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
 import { motion } from "framer-motion";
@@ -7,6 +7,18 @@ import { useInView } from "react-intersection-observer";
 
 function Contact() {
   const { ref, inView } = useInView({ triggerOnce: true });
+
+  // Détection mobile
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const blurClass = isMobile ? "" : "backdrop-blur-xl";
+  const shadowClass = isMobile ? "shadow-md" : "shadow-2xl";
 
   return (
     <section
@@ -30,18 +42,16 @@ function Contact() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={inView ? { opacity: 1, scale: 1 } : {}}
         transition={{ duration: 0.8 }}
-        className="max-w-xl mx-auto bg-white/10 dark:bg-gray-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-10 border border-white/20 dark:border-gray-700"
+        className={`max-w-xl mx-auto ${blurClass} rounded-3xl ${shadowClass} p-10 border border-white/20 dark:border-gray-700 bg-white/10 dark:bg-gray-800/50`}
       >
         <ul className="space-y-6 text-gray-700 dark:text-gray-300 text-lg">
           <li className="flex items-center gap-4">
             <AiOutlineMail className="text-indigo-600 dark:text-indigo-400 text-2xl" />
             <a
-              href="https://mail.google.com/mail/u/0/?pli=1#inbox?compose=GTvVlcSBnqHwhlHSZZWsMVBCdhKMHQWXnfFmcJJgpDDtNncJVjTFGwDpjvnKTZKRdXwWGXqjpKVzj"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:haddadasa006@gmail.com"
               className="hover:underline text-gray-900 dark:text-gray-100 transition"
               data-tooltip-id="email-tooltip"
-              data-tooltip-content="Cliquez pour ouvrir Gmail"
+              data-tooltip-content="Cliquez pour envoyer un email"
               aria-label="Envoyer un email à Asma Haddad"
             >
               haddadasa006@gmail.com
@@ -103,6 +113,8 @@ function Contact() {
           </li>
         </ul>
       </motion.div>
+
+      {/* Tooltips */}
       <Tooltip id="email-tooltip" place="top" effect="solid" />
       <Tooltip id="phone-tooltip" place="top" effect="solid" />
       <Tooltip id="linkedin-tooltip" place="top" effect="solid" />

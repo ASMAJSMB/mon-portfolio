@@ -8,7 +8,7 @@ import Experiences from "./components/Experiences";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import ScrollToTopButton from "./components/ScrollToTopButton";
-import useCursor from "./components/useCursor"; // Assurez-vous que le dossier hooks existe
+import useCursor from "./components/useCursor";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -19,16 +19,19 @@ function App() {
 
   // Gestion du mode sombre global
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode);
+    document.documentElement.classList.toggle("dark", darkMode);
   }, [darkMode]);
 
   const handleAccueilClick = () => {
-    setReplay(!replay); // Replay animation on home click
+    setReplay((prev) => !prev); // Replay animation on home click
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-500 font-poppins">
-      <Header onAccueilClick={handleAccueilClick} darkMode={darkMode} setDarkMode={setDarkMode} />
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-500 font-poppins relative">
+      {/* Header avec tous les liens et bouton darkMode */}
+      <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+
+      {/* Sections principales */}
       <main>
         <Accueil replay={replay} />
         <APropos />
@@ -37,7 +40,11 @@ function App() {
         <Experiences />
         <Contact />
       </main>
+
+      {/* Footer */}
       <Footer />
+
+      {/* Bouton pour revenir en haut */}
       <ScrollToTopButton />
     </div>
   );

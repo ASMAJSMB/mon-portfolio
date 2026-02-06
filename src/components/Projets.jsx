@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaExternalLinkAlt, FaPlay, FaPause } from "react-icons/fa";
 import Slider from "react-slick";
@@ -8,13 +8,21 @@ import { useInView } from "react-intersection-observer";
 
 function Projets() {
   const { ref, inView } = useInView({ triggerOnce: true });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const projets = [
     {
       nom: "Application My Note App",
       objectif: "Conception d'un gestionnaire de notes intelligent permettant de classer ses tâches de la plus urgente à la moins prioritaire.",
       tech: "React native",
-      apprentissage: "création d'une application mobile interactive .",
+      apprentissage: "Création d'une application mobile interactive.",
       github: "https://github.com/ASMAJSMB/mynoteapp",
       demo: "https://ecommerce-demo.vercel.app",
       video: "https://raw.githubusercontent.com/ASMAJSMB/mynoteapp/master/WhatsApp%20Video%202026-01-29%20at%2013.27.15.mp4",
@@ -23,36 +31,34 @@ function Projets() {
     {
       nom: "Site Web Pink-Elephant",
       objectif: "Création d'une plateforme web sur mesure pour Pink Elephant, mettant en avant l'identité visuelle unique de la marque à travers une interface moderne et fluide.",
-      tech: "react,firebase , vite,styled components",
-      apprentissage: "Intégration web à partir de maquettes réalisées par des designers ",
+      tech: "React, Firebase, Vite, Styled Components",
+      apprentissage: "Intégration web à partir de maquettes réalisées par des designers.",
       github: "https://github.com/ASMAJSMB/pink-elephant",
       demo: "https://arcade-fire-69ea3.web.app",
       image: "/image/code.jpg",
     },
     {
-      nom: "Site Web Pink-Elephant-Admin ",
-      objectif: "Développement d'une interface d'administration (Back-office) dédiée à la gestion logistique des tournées : automatisation du calendrier des dates et mise à jour dynamique du site public.",
-      tech: "React ,vite, Firebase",
+      nom: "Site Web Pink-Elephant-Admin",
+      objectif: "Développement d'une interface d'administration (Back-office) dédiée à la gestion logistique des tournées.",
+      tech: "React, Vite, Firebase",
       apprentissage: "Développement web, synchronisation en temps réel.",
       github: "https://github.com/nylbix12/arcade-fire-vitrine",
       demo: "https://arcadeback.web.app",
       image: "/image/cod.jpg"
-
     },
   ];
 
-  const [playingStates, setPlayingStates] = useState(projets.map(() => true));
+  const [playingStates, setPlayingStates] = useState(projets.map(() => false));
   const videoRefs = useRef(projets.map(() => null));
 
   const togglePlay = (index) => {
     const video = videoRefs.current[index];
     if (video) {
-      if (playingStates[index]) {
-        video.pause();
-      } else {
-        video.play();
-      }
-      setPlayingStates((prev) => prev.map((state, i) => (i === index ? !state : state)));
+      if (playingStates[index]) video.pause();
+      else video.play();
+      setPlayingStates((prev) =>
+        prev.map((state, i) => (i === index ? !state : state))
+      );
     }
   };
 
@@ -63,10 +69,7 @@ function Projets() {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: false,
-    responsive: [
-      { breakpoint: 768, settings: { slidesToShow: 1 } },
-      { breakpoint: 1024, settings: { slidesToShow: 1 } },
-    ],
+    adaptiveHeight: true,
   };
 
   return (
@@ -83,18 +86,12 @@ function Projets() {
 
       <Slider {...settings} className="max-w-5xl mx-auto">
         {projets.map((projet, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: index * 0.1 }}
-            className="p-4"
-          >
+          <div key={index} className="p-4">
             <div className="flex flex-col md:flex-row bg-white/80 dark:bg-gray-800/50 backdrop-blur-md rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 min-h-[450px]">
               
-              {/* PARTIE GAUCHE : MÉDIA (VIDÉO OU IMAGE) */}
+              {/* MEDIA */}
               <div className="w-full md:w-1/3 bg-black flex items-center justify-center p-2 relative">
-                {projet.video ? (
+                {projet.video && !isMobile ? (
                   <>
                     <video
                       ref={(el) => (videoRefs.current[index] = el)}
@@ -124,48 +121,29 @@ function Projets() {
                 )}
               </div>
 
-              {/* PARTIE DROITE : INFORMATIONS */}
+              {/* INFO */}
               <div className="w-full md:w-2/3 p-8 flex flex-col justify-center">
                 <h3 className="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">
                   {projet.nom}
                 </h3>
-                
                 <div className="space-y-3 mb-6">
-                  <p className="text-gray-700 dark:text-gray-300">
-                    <strong className="text-gray-900 dark:text-white">Objectif :</strong> {projet.objectif}
-                  </p>
-                  <p className="text-gray-700 dark:text-gray-300">
-                    <strong className="text-gray-900 dark:text-white">Technologies :</strong> {projet.tech}
-                  </p>
-                  <p className="text-gray-700 dark:text-gray-300">
-                    <strong className="text-gray-900 dark:text-white">Apprentissages :</strong> {projet.apprentissage}
-                  </p>
+                  <p><strong className="text-gray-900 dark:text-white">Objectif :</strong> {projet.objectif}</p>
+                  <p><strong className="text-gray-900 dark:text-white">Technologies :</strong> {projet.tech}</p>
+                  <p><strong className="text-gray-900 dark:text-white">Apprentissages :</strong> {projet.apprentissage}</p>
                 </div>
-
                 <div className="flex gap-6">
-                  <a
-                    href={projet.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition"
-                  >
+                  <a href={projet.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition">
                     <FaGithub size={20} /> Code source
                   </a>
-                  {/* Condition pour masquer le bouton demo pour "Application My Note App" */}
                   {projet.nom !== "Application My Note App" && (
-                    <a
-                      href={projet.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-green-500 transition"
-                    >
+                    <a href={projet.demo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-green-500 transition">
                       <FaExternalLinkAlt size={18} /> Voir la démo
                     </a>
                   )}
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
       </Slider>
     </section>

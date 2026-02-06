@@ -14,7 +14,7 @@ function ScrollToTopButton() {
       }
     };
 
-    window.addEventListener("scroll", toggleVisibility);
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
@@ -35,10 +35,10 @@ function ScrollToTopButton() {
           whileHover={{ scale: 1.1, rotate: 360 }}
           whileTap={{ scale: 0.9 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-4 bg-gradient-to-r from-indigo-500 to-pink-500 text-white rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300"
+          className="fixed bottom-6 md:bottom-8 right-6 md:right-8 z-50 p-3 md:p-4 bg-gradient-to-r from-indigo-500 to-pink-500 text-white rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300"
           aria-label="Retour en haut"
         >
-          <FaArrowUp className="text-xl" />
+          <FaArrowUp className="text-lg md:text-xl" />
         </motion.button>
       )}
     </AnimatePresence>

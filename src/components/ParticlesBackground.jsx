@@ -1,29 +1,38 @@
-import React, { useMemo } from "react";
-import Particles from "@tsparticles/react";  // Wrapper React officiel
-import { loadFull } from "tsparticles";  // Chargeur pour les fonctionnalités complètes
+import React, { useMemo, useEffect, useState } from "react";
+import Particles from "@tsparticles/react";
+import { loadFull } from "tsparticles";
 
 const ParticlesBackground = () => {
-  // Configuration des particules (ajustez selon vos besoins)
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Détection mobile/tablette
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const options = useMemo(() => ({
-    background: { color: { value: "transparent" } },  // Arrière-plan transparent pour s'adapter à votre gradient
-    fpsLimit: 120,
+    background: { color: { value: "transparent" } },
+    fpsLimit: 60,  // Limite de fps pour les mobiles
     interactivity: {
       events: {
-        onClick: { enable: true, mode: "push" },
-        onHover: { enable: true, mode: "repulse" },
+        onClick: { enable: !isMobile, mode: "push" },
+        onHover: { enable: !isMobile, mode: "repulse" },
       },
       modes: {
-        push: { quantity: 4 },
-        repulse: { distance: 200, duration: 0.4 },
+        push: { quantity: 2 },
+        repulse: { distance: 100, duration: 0.3 },
       },
     },
     particles: {
-      color: { value: "#ffffff" },  // Blanc pour contraster avec le fond sombre
+      color: { value: "#ffffff" },
       links: {
         color: "#ffffff",
-        distance: 150,
+        distance: 120,
         enable: true,
-        opacity: 0.5,
+        opacity: 0.4,
         width: 1,
       },
       collisions: { enable: true },
@@ -32,20 +41,19 @@ const ParticlesBackground = () => {
         enable: true,
         outModes: { default: "bounce" },
         random: false,
-        speed: 6,
+        speed: isMobile ? 2 : 4,  // plus lent sur mobile
         straight: false,
       },
-      number: { density: { enable: true, area: 800 }, value: 80 },
+      number: { density: { enable: true, area: 800 }, value: isMobile ? 30 : 80 },
       opacity: { value: 0.5 },
       shape: { type: "circle" },
-      size: { value: { min: 1, max: 5 } },
+      size: { value: { min: 1, max: 4 } },
     },
     detectRetina: true,
-  }), []);
+  }), [isMobile]);
 
-  // Initialisation asynchrone (nécessaire pour charger les plugins)
   const particlesInit = async (engine) => {
-    await loadFull(engine);  // Charge toutes les fonctionnalités
+    await loadFull(engine);
   };
 
   return (
@@ -59,7 +67,7 @@ const ParticlesBackground = () => {
         left: 0,
         width: "100%",
         height: "100%",
-        zIndex: -1,  // Derrière le contenu
+        zIndex: -1,
       }}
     />
   );

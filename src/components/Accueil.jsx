@@ -7,9 +7,19 @@ function Accueil({ replay }) {
   const [playAnimation, setPlayAnimation] = useState(false);
   const [typedDescription, setTypedDescription] = useState("");
   const fullText = "Développeuse web & mobile junior";
-  const fullDescription = "Développeuse fullstack avec une expérience en management et gestion de projets, titulaire d'un bachelor en marketing et communication numérique.";
+  const fullDescription =
+    "Développeuse fullstack avec une expérience en management et gestion de projets, titulaire d'un bachelor en marketing et communication numérique.";
   const descTypingIndexRef = useRef(0);
   const timerRef = useRef(null);
+
+  // Détection mobile
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // useEffect pour gérer l'animation globale
   useEffect(() => {
@@ -21,7 +31,9 @@ function Accueil({ replay }) {
   // Fonction récursive pour le typing de la description
   const typeDescription = () => {
     if (descTypingIndexRef.current < fullDescription.length) {
-      setTypedDescription(fullDescription.slice(0, descTypingIndexRef.current + 1));
+      setTypedDescription(
+        fullDescription.slice(0, descTypingIndexRef.current + 1)
+      );
       descTypingIndexRef.current++;
       timerRef.current = setTimeout(typeDescription, 50);
     }
@@ -50,8 +62,14 @@ function Accueil({ replay }) {
       className="relative min-h-screen pt-40 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900 flex items-center justify-center px-6 overflow-hidden"
       aria-labelledby="accueil-title"
     >
-      <ParticlesBackground />
-      <div className="relative z-10 max-w-6xl w-full bg-white/10 dark:bg-black/50 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/20 dark:border-gray-700 text-white flex flex-col md:flex-row items-center gap-8">
+      {!isMobile && <ParticlesBackground />}
+      <div
+        className={`
+          relative z-10 max-w-6xl w-full rounded-3xl p-12 
+          ${isMobile ? "bg-white shadow-md border-gray-200" : "bg-white/10 dark:bg-black/50 backdrop-blur-xl shadow-2xl border border-white/20 dark:border-gray-700"} 
+          text-white flex flex-col md:flex-row items-center gap-8
+        `}
+      >
         <div className="md:w-1/2">
           <motion.h1
             key="title"
@@ -70,14 +88,15 @@ function Accueil({ replay }) {
             transition={{ delay: 2.2, duration: 1.5 }}
             className="text-2xl mb-4 text-indigo-200 font-semibold"
           >
-            {fullText} <span className="text-orange-400">À la recherche d'une alternance</span>
+            {fullText}{" "}
+            <span className="text-orange-400">À la recherche d'une alternance</span>
           </motion.p>
           <motion.p
             key="description"
             initial={{ opacity: 0 }}
             animate={playAnimation ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 3.5, duration: 1.5 }}
-            className="text-lg text-white dark:text-indigo-100 max-w-2xl leading-relaxed mb-10" // Changé à text-white pour visibilité
+            className="text-lg text-white dark:text-indigo-100 max-w-2xl leading-relaxed mb-10"
           >
             {typedDescription}
           </motion.p>
@@ -136,7 +155,8 @@ function Accueil({ replay }) {
             initial={{ opacity: 0, x: 60 }}
             animate={playAnimation ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
             transition={{ delay: 1.8, duration: 2 }}
-            className="w-64 md:w-80 h-auto rounded-xl shadow-2xl border-4 border-white/20 hover:shadow-indigo-500/50 transition-shadow duration-500"
+            className={`w-64 md:w-80 h-auto rounded-xl border-4 border-white/20 
+              ${isMobile ? "shadow-md" : "shadow-2xl hover:shadow-indigo-500/50"} transition-shadow duration-500`}
             loading="lazy"
           />
         </div>

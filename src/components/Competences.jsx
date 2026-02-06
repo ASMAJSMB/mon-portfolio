@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaGitAlt, FaPhp } from "react-icons/fa";
 import { SiTailwindcss, SiFirebase } from "react-icons/si";
 import { motion } from "framer-motion";
@@ -7,6 +7,15 @@ import { useInView } from "react-intersection-observer";
 function Competences() {
   const [showCode, setShowCode] = useState(false);
   const { ref, inView } = useInView({ triggerOnce: true });
+
+  // Détection mobile
+  const [isMobile, setIsMobile] = React.useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const cards = [
     {
@@ -58,7 +67,7 @@ function Competences() {
       className="relative py-20 px-6 max-w-6xl mx-auto bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900 text-gray-900 dark:text-gray-100 overflow-hidden"
       aria-labelledby="competences-title"
     >
-      {/* Étoiles flottantes pour touche créative */}
+      {/* Étoiles flottantes */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           animate={{ y: [0, -20, 0] }}
@@ -75,6 +84,7 @@ function Competences() {
           🌟
         </motion.div>
       </div>
+
       <div className="text-center mb-16">
         <h2
           id="competences-title"
@@ -89,39 +99,45 @@ function Competences() {
           {showCode ? "Masquer Code" : "Mode Développeur"}
         </button>
       </div>
+
       <div className="grid md:grid-cols-3 gap-8">
-        {cards.map((card, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 50, rotateY: 45 }}
-            animate={inView ? { opacity: 1, y: 0, rotateY: 0 } : {}}
-            transition={{ duration: 0.8, delay: idx * 0.2 }}
-            whileHover={{ scale: 1.05, rotateY: 15, z: 50 }}
-            className={`${card.color} p-6 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700 backdrop-blur-md transform transition-all duration-500 hover:shadow-2xl`}
-          >
-            <h3 className="text-xl font-semibold mb-4 text-white">{card.titre}</h3>
-            <ul className="space-y-2 mb-4">
-              {card.items.map((item, i) => (
-                <motion.li
-                  key={i}
-                  whileHover={{ scale: 1.1 }}
-                  className="flex items-center gap-3 text-white font-medium hover:text-gray-200 transition"
+        {cards.map((card, idx) => {
+          const blurClass = isMobile ? "" : "backdrop-blur-md";
+          const shadowClass = isMobile ? "shadow-md" : "shadow-2xl hover:shadow-2xl";
+          const borderClass = isMobile ? "border-gray-200 dark:border-gray-700" : "border border-white/20 dark:border-gray-700";
+          return (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 50, rotateY: 45 }}
+              animate={inView ? { opacity: 1, y: 0, rotateY: 0 } : {}}
+              transition={{ duration: 0.8, delay: idx * 0.2 }}
+              whileHover={{ scale: 1.05, rotateY: 15, z: 50 }}
+              className={`${card.color} p-6 rounded-2xl transform transition-all duration-500 ${blurClass} ${shadowClass} ${borderClass}`}
+            >
+              <h3 className="text-xl font-semibold mb-4 text-white">{card.titre}</h3>
+              <ul className="space-y-2 mb-4">
+                {card.items.map((item, i) => (
+                  <motion.li
+                    key={i}
+                    whileHover={{ scale: 1.1 }}
+                    className="flex items-center gap-3 text-white font-medium hover:text-gray-200 transition"
+                  >
+                    <span>{item.icon}</span> {item.name}
+                  </motion.li>
+                ))}
+              </ul>
+              {showCode && (
+                <motion.pre
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="bg-black/50 text-green-400 p-2 rounded text-xs overflow-x-auto"
                 >
-                  <span>{item.icon}</span> {item.name}
-                </motion.li>
-              ))}
-            </ul>
-            {showCode && (
-              <motion.pre
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="bg-black/50 text-green-400 p-2 rounded text-xs overflow-x-auto"
-              >
-                {card.codeSnippet}
-              </motion.pre>
-            )}
-          </motion.div>
-        ))}
+                  {card.codeSnippet}
+                </motion.pre>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
     </section>
   );
