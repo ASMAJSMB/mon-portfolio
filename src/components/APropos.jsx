@@ -98,7 +98,7 @@ function APropos() {
         </p>
         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
           
-         Après un <strong> baccalauréat en sciences expérimentales (mention très bien)</strong>, j’ai suivi <strong>2 ans en informatique à l’Université de Béjaïa (Algérie)</strong>, où j’ai acquis des bases solides en algorithmique, C++, Java POO, assembleur, Linux, mathématiques et logique. J’ai ensuite complété ma formation par une année de <strong>bachelor Web et Mobile</strong>, me spécialisant en React, PHP et Firebase. Actuellement, je poursuis un <strong>bachelor en marketing digital et communication</strong>, renforçant mes compétences en stratégie digitale.
+         Après un <strong> baccalauréat en sciences expérimentales (mention très bien)</strong>, j’ai suivi 2 ans en informatique à l’Université de Béjaïa , où j’ai acquis des bases solides en algorithmique, C++, Java POO, assembleur, Linux, mathématiques et logique. J’ai ensuite complété ma formation par une année de <strong>bachelor Web et Mobile</strong>, me spécialisant en React, PHP et Firebase. Actuellement, je poursuis un <strong>bachelor en marketing digital et communication</strong>, renforçant mes compétences en stratégie digitale.
         </p>
         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
           Mon objectif est de contribuer activement à la création de solutions
